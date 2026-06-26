@@ -1,0 +1,4 @@
+.DS_Store
+*.bak
+plots.json.bak*
+node_modules/
