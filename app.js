@@ -6,11 +6,12 @@ const COLORS_HI = { til_solu:'#C6FF87', fratekin:'#86EEFF', seld:'#FF8082', sida
 const LABELS = { til_solu:'Til sölu', fratekin:'Frátekin', seld:'Seld', sidari:'Síðari áfangi' };
 const ORDER  = ['til_solu','fratekin','seld','sidari'];
 const HEIGHT = 12;
+const LABEL_MIN_ZOOM = 12.5;   // street names only show once zoomed into the area
 
 const $ = s => document.querySelector(s);
 const fmt = n => (n==null?null:String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'));
 
-let DATA, map, selected=null, hovered=null, homeView=null, streetMarkers=[];
+let DATA, map, selected=null, hovered=null, homeView=null, streetMarkers=[], _labelsReady=false;
 const filter = new Set(ORDER);
 
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
@@ -47,8 +48,11 @@ function addStreetLabels(){
       .setLngLat(f.geometry.coordinates).addTo(map));
   }
 }
-function setStreetLabelsVisible(v){
-  for(const m of streetMarkers) m.getElement().style.opacity = v ? '1' : '0';
+/* labels show only once revealed, not while focused on a single plot, and only
+   when zoomed in enough that they belong with the plots (not on the wide view) */
+function updateStreetLabels(){
+  const show = _labelsReady && !_focused && map && map.getZoom() >= LABEL_MIN_ZOOM;
+  for(const m of streetMarkers) m.getElement().style.opacity = show ? '1' : '0';
 }
 function bounds(){
   const b=new maplibregl.LngLatBounds();
@@ -108,7 +112,7 @@ function onMapLoad(){
   wireMap(); bindUI(); updateLegendCounts();
   introSequence();
   // safety: ensure street names surface after the intro, whatever path the reveal took
-  setTimeout(()=>{ if(!_focused) setStreetLabelsVisible(true); }, 6800);
+  setTimeout(()=>{ _labelsReady=true; updateStreetLabels(); }, 6800);
 }
 
 /* set plot visuals at a given height/opacity (used for the reveal animation + hover) */
@@ -125,7 +129,7 @@ function revealPlots(){
     const t=Math.min(1,(now-t0)/DUR), e=1-Math.pow(1-t,3); // easeOut — plots grow up
     applyPlotPaint(HEIGHT*e, 0.6*e);
     if(t<1) requestAnimationFrame(step);
-    else { _userActive=0; _introDone=true; setStreetLabelsVisible(true); }   // orbit may begin after the reveal
+    else { _userActive=0; _introDone=true; _labelsReady=true; updateStreetLabels(); }   // orbit may begin after the reveal
   };
   requestAnimationFrame(step);
 }
@@ -196,6 +200,7 @@ function wireMap(){
     if(document.body.classList.contains('edit')){ editPlot(p,e.originalEvent); return; } focusPlot(p); });
   map.on('click',e=>{ if(!map.queryRenderedFeatures(e.point,{layers:['plots-fill']}).length) closeInfo(); });
   map.on('rotate',updateCompass); map.on('pitch',updateCompass);
+  map.on('zoom',updateStreetLabels);   // hide street names when zoomed out, show when zoomed in
   // any manual interaction pauses the auto-orbit (resumes after a few seconds idle)
   ['mousemove','mousedown','wheel','touchstart','dblclick'].forEach(ev=>
     map.getCanvas().addEventListener(ev, markActive, {passive:true}));
@@ -242,7 +247,7 @@ function focusPlot(p){
   map.setPaintProperty('plots-line','line-color','#ffffff');
   map.setPaintProperty('plots-line','line-width',2.6);
   map.setPaintProperty('plots-line','line-opacity',1);
-  setStreetLabelsVisible(false);
+  updateStreetLabels();
   const b=new maplibregl.LngLatBounds();
   for(const c of p.ring) b.extend(c);
   const isMobile=window.innerWidth<=768;
@@ -257,7 +262,7 @@ function unfocus(){
   map.setPaintProperty('plots-line','line-width',1.1);
   map.setPaintProperty('plots-line','line-opacity',0.85);
   applyFilter();                                       // bring all plots back (per legend filter)
-  setStreetLabelsVisible(true);
+  updateStreetLabels();
   markActive();
   const h=computeHome(); if(h) map.flyTo({...h, duration:1600, curve:1.3, essential:true, easing:easeInOut});
 }
@@ -305,7 +310,7 @@ function updateLegendCounts(){
 }
 function editPlot(p,ev){
   if(ev && ev.shiftKey){ const val=prompt('Gata og númer lóðar:', `${p.street} ${p.number}`);
-    if(val){ const m=val.trim().match(/^(.+?)\s+(\d+)$/); if(m){ p.street=m[1]; p.number=+m[2]; addStreetLabels(); setStreetLabelsVisible(!_focused); } }
+    if(val){ const m=val.trim().match(/^(.+?)\s+(\d+)$/); if(m){ p.street=m[1]; p.number=+m[2]; addStreetLabels(); updateStreetLabels(); } }
   } else { p.status=ORDER[(ORDER.indexOf(p.status)+1)%ORDER.length];
     map.getSource('plots').setData(plotsGeoJSON()); updateLegendCounts(); }
 }
