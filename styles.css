@@ -106,6 +106,12 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .ctl:hover{background:var(--cream3)}
 .ctl svg{width:18px;height:18px}
 
+/* Street-name labels (HTML markers on the map) */
+.street-label{font-family:var(--eyebrow);font-size:12px;font-weight:600;letter-spacing:.14em;
+  text-transform:uppercase;color:#fff;white-space:nowrap;pointer-events:none;user-select:none;
+  text-shadow:0 1px 2px rgba(8,14,8,.95),0 0 7px rgba(8,14,8,.85);transition:opacity .5s ease}
+@media (max-width:768px){.street-label{font-size:10.5px;letter-spacing:.1em}}
+
 /* ---------- Legend toggle (bottom-center) ---------- */
 .legend-toggle{
   position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:55;
@@ -856,4 +862,44 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:.005em}
   .legend-panel{width:190px}
   .br-dock{right:14px;bottom:16px;gap:9px}
   .map-controls{left:14px;bottom:18px}
+}
+
+/* ============ Mobile responsiveness pass (375px-first cleanups) ============ */
+html{overflow-x:clip}                       /* site-wide guard against horizontal scroll */
+.carousel{max-width:100vw;overflow-x:clip}  /* defuse the latent full-bleed 100vw rule */
+
+@media (max-width:820px){
+  .nav-inline{gap:20px}
+  .nav-inline a.nav-cta{padding:8px 12px}
+}
+@media (max-width:768px){
+  /* map-page overlay close buttons → real 40px tap targets */
+  .info-close{width:40px;height:40px;display:flex;align-items:center;justify-content:center;margin-right:-6px}
+  .side-menu .mclose{width:40px;height:40px;display:flex;align-items:center;justify-content:center;margin:-8px -8px 0 0}
+}
+@media (max-width:760px){
+  /* header burger toggles → comfortable tap target */
+  .nav-burger{min-height:44px;padding:8px 6px;margin-right:-6px;align-items:center}
+  /* contact band: trim desktop padding on phones */
+  .cta-band{padding:64px 0}
+  /* FAQ answers must never clip on narrow / zoomed screens */
+  .faq-item.open .faq-a{max-height:600px}
+}
+@media (max-width:680px){
+  .topbar:not(.site-header) .contact-link{display:none}   /* clear the centered brand */
+}
+@media (max-width:560px){
+  /* map-page hamburger keeps a 40px target even when its label collapses */
+  .topbar:not(.site-header) .menu-btn{min-width:40px;min-height:40px;justify-content:center;margin-left:-9px}
+  /* edit bar (admin) wraps instead of overflowing the row */
+  .edit-bar{flex-wrap:wrap;gap:8px;padding:8px 14px}
+  .edit-bar .hint{font-size:11px;flex-basis:100%;order:3}
+  .edit-bar .grow{display:none}
+  .edit-bar button{margin-left:auto}
+}
+@media (max-width:480px){
+  .pc-body h3{font-size:22px;margin:0 0 10px}
+  .footer-base{flex-direction:column;align-items:flex-start;gap:8px}
+  .intro2-initial{font-size:48px;margin:4px 10px 0 0}
+  .street-label{font-size:10px;letter-spacing:.08em}
 }

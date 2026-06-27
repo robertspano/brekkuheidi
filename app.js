@@ -10,7 +10,7 @@ const HEIGHT = 12;
 const $ = s => document.querySelector(s);
 const fmt = n => (n==null?null:String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'));
 
-let DATA, map, selected=null, hovered=null, homeView=null;
+let DATA, map, selected=null, hovered=null, homeView=null, streetMarkers=[];
 const filter = new Set(ORDER);
 
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
@@ -29,9 +29,26 @@ function streetsGeoJSON(){
   return { type:'FeatureCollection', features:Object.entries(by).map(([street,arr])=>{
     const cx=arr.reduce((s,p)=>s+p.clng,0)/arr.length, cy=arr.reduce((s,p)=>s+p.clat,0)/arr.length;
     return { type:'Feature',
-      properties:{ name:street.toUpperCase(), count:arr.length, sort:-arr.length },  // bigger streets win collisions
+      properties:{ name:street.toUpperCase(), count:arr.length, sort:-arr.length },
       geometry:{type:'Point',coordinates:[cx,cy]} };
   })};
+}
+/* Street names as HTML markers (DOM) — uses the page font, so they always
+   render regardless of the external glyph server. */
+function addStreetLabels(){
+  for(const m of streetMarkers) m.remove();
+  streetMarkers = [];
+  for(const f of streetsGeoJSON().features){
+    const el=document.createElement('div');
+    el.className='street-label';
+    el.textContent=f.properties.name;
+    el.style.opacity='0';
+    streetMarkers.push(new maplibregl.Marker({element:el, anchor:'center'})
+      .setLngLat(f.geometry.coordinates).addTo(map));
+  }
+}
+function setStreetLabelsVisible(v){
+  for(const m of streetMarkers) m.getElement().style.opacity = v ? '1' : '0';
 }
 function bounds(){
   const b=new maplibregl.LngLatBounds();
@@ -86,25 +103,12 @@ function onMapLoad(){
       'fill-extrusion-height':0, 'fill-extrusion-base':0, 'fill-extrusion-opacity':0 }});
   map.addLayer({ id:'plots-line', type:'line', source:'plots',
     paint:{'line-color':['get','color'], 'line-width':1.1, 'line-opacity':0}});
-  try {
-    map.addSource('streets',{type:'geojson', data:streetsGeoJSON()});
-    map.addLayer({ id:'streets', type:'symbol', source:'streets', minzoom:12.6,
-      layout:{ 'text-field':['get','name'], 'text-font':['Noto Sans Regular'],
-        'text-size':['interpolate',['linear'],['zoom'], 13,11.5, 14.5,13.5, 16,16, 17.5,19],
-        'text-letter-spacing':0.14, 'text-max-width':9, 'text-padding':2,
-        'symbol-sort-key':['get','sort'],
-        'text-allow-overlap':true, 'text-ignore-placement':true },   // street names should always show
-      paint:{ 'text-color':'#ffffff', 'text-halo-color':'rgba(16,24,14,.92)',
-        'text-halo-width':2, 'text-halo-blur':0.3, 'text-opacity':0 }});
-  } catch(e){ console.warn('street labels skipped', e); }
+  addStreetLabels();                 // DOM markers, hidden until the reveal
 
   wireMap(); bindUI(); updateLegendCounts();
   introSequence();
-  // safety: ensure street names are visible after the intro, whatever path the reveal took
-  setTimeout(()=>{ if(map.getLayer('streets') && !_focused){
-    map.setLayoutProperty('streets','visibility','visible');
-    map.setPaintProperty('streets','text-opacity',0.96);
-  } }, 6800);
+  // safety: ensure street names surface after the intro, whatever path the reveal took
+  setTimeout(()=>{ if(!_focused) setStreetLabelsVisible(true); }, 6800);
 }
 
 /* set plot visuals at a given height/opacity (used for the reveal animation + hover) */
@@ -114,7 +118,6 @@ function applyPlotPaint(h, op){
     ['case',['boolean',['feature-state','hover'],false], h+18, h]);
   map.setPaintProperty('plots-fill','fill-extrusion-opacity', op);
   if(map.getLayer('plots-line')) map.setPaintProperty('plots-line','line-opacity', Math.min(0.9, op*1.5));
-  if(map.getLayer('streets')) map.setPaintProperty('streets','text-opacity', op>0?Math.min(1, op/0.6):0);
 }
 function revealPlots(){
   const DUR=1300, t0=performance.now();
@@ -122,7 +125,7 @@ function revealPlots(){
     const t=Math.min(1,(now-t0)/DUR), e=1-Math.pow(1-t,3); // easeOut — plots grow up
     applyPlotPaint(HEIGHT*e, 0.6*e);
     if(t<1) requestAnimationFrame(step);
-    else { _userActive=0; _introDone=true; }   // orbit may begin after the reveal
+    else { _userActive=0; _introDone=true; setStreetLabelsVisible(true); }   // orbit may begin after the reveal
   };
   requestAnimationFrame(step);
 }
@@ -239,7 +242,7 @@ function focusPlot(p){
   map.setPaintProperty('plots-line','line-color','#ffffff');
   map.setPaintProperty('plots-line','line-width',2.6);
   map.setPaintProperty('plots-line','line-opacity',1);
-  if(map.getLayer('streets')) map.setLayoutProperty('streets','visibility','none');
+  setStreetLabelsVisible(false);
   const b=new maplibregl.LngLatBounds();
   for(const c of p.ring) b.extend(c);
   const isMobile=window.innerWidth<=768;
@@ -254,7 +257,7 @@ function unfocus(){
   map.setPaintProperty('plots-line','line-width',1.1);
   map.setPaintProperty('plots-line','line-opacity',0.85);
   applyFilter();                                       // bring all plots back (per legend filter)
-  if(map.getLayer('streets')) map.setLayoutProperty('streets','visibility','visible');
+  setStreetLabelsVisible(true);
   markActive();
   const h=computeHome(); if(h) map.flyTo({...h, duration:1600, curve:1.3, essential:true, easing:easeInOut});
 }
@@ -302,7 +305,7 @@ function updateLegendCounts(){
 }
 function editPlot(p,ev){
   if(ev && ev.shiftKey){ const val=prompt('Gata og númer lóðar:', `${p.street} ${p.number}`);
-    if(val){ const m=val.trim().match(/^(.+?)\s+(\d+)$/); if(m){ p.street=m[1]; p.number=+m[2]; map.getSource('streets').setData(streetsGeoJSON()); } }
+    if(val){ const m=val.trim().match(/^(.+?)\s+(\d+)$/); if(m){ p.street=m[1]; p.number=+m[2]; addStreetLabels(); setStreetLabelsVisible(!_focused); } }
   } else { p.status=ORDER[(ORDER.indexOf(p.status)+1)%ORDER.length];
     map.getSource('plots').setData(plotsGeoJSON()); updateLegendCounts(); }
 }
