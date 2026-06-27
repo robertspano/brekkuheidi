@@ -177,12 +177,18 @@ function introSequence(){
    user hasn't interacted for a few seconds. Self-healing — never permanently stops. */
 const ORBIT_SPEED=3.2;       // degrees per second
 const ORBIT_RESUME=4000;     // ms of no interaction before (re)starting
-let _introDone=false, _userActive=0, _olast=0, _orbitOn=false, _focused=false;
+let _introDone=false, _userActive=0, _olast=0, _orbitOn=false, _focused=false, _lastLabelShow=null;
 function markActive(){ _userActive=performance.now(); }
 function orbitLoop(now){
   const dt=_olast?Math.min((now-_olast)/1000,0.08):0; _olast=now;
   if(_introDone && !_focused && (performance.now()-_userActive)>ORBIT_RESUME){
     map.setBearing(map.getBearing()+ORBIT_SPEED*dt);
+  }
+  // robust: keep street labels in sync with the current zoom every frame, so they
+  // can never stay visible when zoomed out even if a 'zoom' event is missed
+  if(_labelsReady){
+    const should = !_focused && map.getZoom() >= LABEL_MIN_ZOOM;
+    if(should !== _lastLabelShow){ _lastLabelShow = should; updateStreetLabels(); }
   }
   requestAnimationFrame(orbitLoop);
 }
