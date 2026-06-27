@@ -12,27 +12,11 @@ const fmt = n => (n==null?null:String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'));
 let DATA, map, selected=null, hovered=null, homeView=null;
 const filter = new Set(ORDER);
 
-/* ---- loader: progress bar + status text ---- */
-let _loadPct=0, _loadTimer=null;
-function loadSet(pct, msg){
-  _loadPct=Math.max(_loadPct, Math.min(100, pct));
-  const bar=$('#loader .loader-bar span'); if(bar) bar.style.width=_loadPct+'%';
-  if(msg){ const st=$('#loader .loader-status'); if(st) st.textContent=msg; }
-}
-function loadCreep(){            // keep the bar drifting forward while we wait on tiles
-  loadSet(8);
-  _loadTimer=setInterval(()=>{ if(_loadPct<90) loadSet(_loadPct+(90-_loadPct)*0.05+0.4); }, 320);
-}
-function hideLoader(){
-  if(_loadTimer){ clearInterval(_loadTimer); _loadTimer=null; }
-  $('#loader .loader-bar')?.classList.add('done');
-  loadSet(100, 'Tilbúið');
-  setTimeout(()=>$('#loader').classList.add('hide'), 300);
-}
-loadCreep();
+/* ---- loader: status line (the bar animates indefinitely via CSS) ---- */
+function loadStatus(msg){ const st=$('#loader .loader-status'); if(st) st.textContent=msg; }
+function hideLoader(){ $('#loader').classList.add('hide'); }
 
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
-  if(_loadTimer){ clearInterval(_loadTimer); _loadTimer=null; }
   $('#loader').innerHTML='<div class="word">Villa við að hlaða gögnum</div>'; console.error(e);
 });
 
