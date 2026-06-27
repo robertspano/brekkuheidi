@@ -13,8 +13,17 @@ let DATA, map, selected=null, hovered=null, homeView=null;
 const filter = new Set(ORDER);
 
 /* ---- loader: status line (the bar animates indefinitely via CSS) ---- */
+const LOADER_MIN_MS = 2400;            // keep the loading screen up at least this long
+const _loaderStart = performance.now();
+let _loaderHidden = false;
 function loadStatus(msg){ const st=$('#loader .loader-status'); if(st) st.textContent=msg; }
-function hideLoader(){ $('#loader').classList.add('hide'); }
+function hideLoader(){
+  if(_loaderHidden) return;
+  const wait = LOADER_MIN_MS - (performance.now() - _loaderStart);
+  if(wait > 0){ setTimeout(hideLoader, wait); return; }   // don't flash away too fast
+  _loaderHidden = true;
+  $('#loader').classList.add('hide');
+}
 
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
   $('#loader').innerHTML='<div class="word">Villa við að hlaða gögnum</div>'; console.error(e);
