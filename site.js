@@ -80,7 +80,7 @@
   });
 
   /* ---- Autoplay card videos only while visible ---- */
-  const vids = $$('.pc-video video');
+  const vids = $$('.pc-video video, .video-showcase video, .feature-media video, .hero-video, .plan-video video');
   if (vids.length && 'IntersectionObserver' in window) {
     const vio = new IntersectionObserver(entries => {
       entries.forEach(e => {
@@ -108,6 +108,40 @@
   /* ---- Footer year ---- */
   $$('.js-year').forEach(el => el.textContent = new Date().getFullYear());
 
+  /* ---- Contact form → compose email (no backend needed) ---- */
+  $$('.contact-form').forEach(form => {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const d = new FormData(form);
+      const to = form.dataset.to || '';
+      const subject = 'Fyrirspurn um lóð í Brekkuheiði';
+      const body = [
+        `Nafn: ${d.get('nafn') || ''}`,
+        `Netfang: ${d.get('netfang') || ''}`,
+        `Sími: ${d.get('simi') || ''}`,
+        `Lóð / áhugasvið: ${d.get('lod') || ''}`,
+        '',
+        d.get('skilabod') || ''
+      ].join('\n');
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      const note = form.querySelector('.cf-note');
+      if (note) note.textContent = 'Takk! Tölvupóstforritið þitt opnast með fyrirspurninni — smelltu á „Senda“ til að ljúka.';
+    });
+  });
+
+  /* ---- Prefill "Lóð / áhugasvið" from the plot the visitor clicked on the map ---- */
+  (() => {
+    let lod;
+    try { lod = sessionStorage.getItem('bh_lod'); } catch (e) {}
+    if (!lod) return;
+    try { sessionStorage.removeItem('bh_lod'); } catch (e) {}
+    const field = document.querySelector('#contactForm [name="lod"]');
+    if (!field) return;
+    field.value = lod;
+    field.classList.add('cf-prefilled');          // brief glow so it's clear it filled itself
+    setTimeout(() => field.classList.remove('cf-prefilled'), 2400);
+  })();
+
   /* ---- Smooth-scroll for in-page anchors ---- */
   $$('a[href^="#"]').forEach(a => {
     a.addEventListener('click', e => {
@@ -118,4 +152,66 @@
       }
     });
   });
+
+  /* ---- Stats band: count-up on scroll (smooth, staggered, once) ---- */
+  (() => {
+    const band = document.querySelector('#stats');
+    if (!band) return;                                    // safe if section absent
+    const nums = Array.from(band.querySelectorAll('.stat2-num[data-stat-to]'));
+    if (!nums.length) return;
+
+    // group separator for 5000 -> "5.000"
+    const group = n => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    const makeRender = el => {
+      const type = el.dataset.statType;
+      const to = parseInt(el.dataset.statTo, 10);
+      const pre = el.dataset.statPrefix || '';
+      const suf = el.dataset.statSuffix || '';
+      return p => {
+        const cur = Math.round(p * to);
+        const body = type === 'area' ? group(cur) : String(cur);
+        el.textContent = pre + body + suf;                // unit lives in a sibling .stat2-unit
+      };
+    };
+    const renders = nums.map(makeRender);
+    const settle = () => renders.forEach(r => r(1));      // exact finals: 23 / ~5.000 / 28
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce ||
+        !('IntersectionObserver' in window) ||
+        !('requestAnimationFrame' in window)) {
+      settle();
+      return;
+    }
+
+    const easeOut = p => 1 - Math.pow(1 - p, 3);
+    const DUR = 1500;
+    const STAGGER = 140;
+
+    const runFrom = start => {
+      nums.forEach((el, i) => {
+        const render = renders[i];
+        const begin = start + i * STAGGER;
+        const frame = now => {
+          const p = Math.min(1, Math.max(0, (now - begin) / DUR));
+          render(easeOut(p));
+          if (p < 1) requestAnimationFrame(frame);
+          else render(1);
+        };
+        requestAnimationFrame(frame);
+      });
+    };
+
+    let done = false;
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting || done) return;
+        done = true;
+        io.disconnect();
+        requestAnimationFrame(t => runFrom(t));
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.25 });
+    io.observe(band);
+  })();
 })();

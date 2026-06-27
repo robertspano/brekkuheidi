@@ -27,20 +27,23 @@
     <a href="kort.html">Lóðakort</a>
     <a href="um-svaedid.html">Um svæðið</a>
     <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-    <a href="hafa-samband.html" class="nav-cta">Hafa samband</a>
+    <a href="#hafa-samband" class="nav-cta">Hafa samband</a>
   </nav>
   <button class="menu-btn nav-burger" id="menuOpen"><span class="bars"><span></span><span></span></span> Valmynd</button>
 </header>
 
 <!-- Hero -->
 <section class="hero" style="--hero:url('assets/aerial1.jpg')">
+  <video class="hero-video" autoplay loop muted playsinline preload="auto" poster="assets/hero_poster.jpg">
+    <source src="assets/hero_video.mp4" type="video/mp4">
+  </video>
   <div class="hero-inner reveal">
     <div class="eyebrow light">Frístundabyggð í Bláskógabyggð</div>
     <h1>Brekkuheiði</h1>
     <p class="hero-sub">Sumarhúsalóðir í grónu landi við Brúará — í hjarta Gullna hringsins.</p>
     <div class="hero-cta">
       <a class="btn btn-primary" href="kort.html">Skoða lóðakort</a>
-      <a class="btn btn-ghost" href="hafa-samband.html">Hafa samband</a>
+      <a class="btn btn-ghost" href="#hafa-samband">Hafa samband</a>
     </div>
   </div>
   <a class="hero-scroll" href="#intro" aria-label="Skruna niður">
@@ -49,26 +52,81 @@
 </section>
 
 <!-- Intro -->
-<section class="section section-cream" id="intro">
-  <div class="wrap intro-grid reveal">
-    <div>
+<section class="section section-cream intro2" id="intro">
+  <div class="wrap intro2-grid reveal">
+
+    <!-- Framed landscape aerial: gallery mat + hairline + caption plate -->
+    <figure class="intro2-figure">
+      <span class="intro2-coord" aria-hidden="true">Suðurland · Ísland</span>
+      <div class="intro2-mat">
+        <img src="assets/aerial2.jpg" alt="Loftmynd af Brekkuheiði — frístundabyggð í Brekkuskógi við ána Brúará" loading="lazy" decoding="async" width="2000" height="1116">
+      </div>
+      <figcaption class="intro2-plate">
+        <span class="intro2-plate-loc">Bláskógabyggð · Biskupstungur</span>
+        <span class="intro2-plate-meta">Landmæld lóðamörk</span>
+      </figcaption>
+    </figure>
+
+    <!-- Editorial content -->
+    <div class="intro2-text">
       <div class="eyebrow">Um Brekkuheiði</div>
-      <h2>Lóðir í einstöku umhverfi</h2>
+      <h2 class="intro2-h">Lóðir í einstöku umhverfi</h2>
+      <span class="intro2-rule" aria-hidden="true"></span>
+
+      <p class="intro2-lead"><span class="intro2-initial" aria-hidden="true">B</span>rekkuheiði er frístundabyggð í <strong>Brekkuskógi</strong> í Bláskógabyggð (Biskupstungum), umvafin skógrækt og náttúru við ána Brúará. Hér eru rúmgóðar sumarhúsalóðir í grónu, skjólsælu landi.</p>
+      <p class="intro2-p">Stutt er í helstu náttúruperlur Suðurlands og alla þjónustu — Gullni hringurinn liggur við túnfótinn. Lóðamörkin eru afmörkuð með landmældum hnitum og hægt að skoða hverja lóð á gagnvirku gervihnattakorti.</p>
+
+      <ul class="intro2-tags" aria-label="Í nágrenninu">
+        <li>Brúará</li>
+        <li>Geysir</li>
+        <li>Gullfoss</li>
+        <li class="intro2-tag-soft">~100 km frá Reykjavík</li>
+      </ul>
     </div>
-    <div class="intro-text">
-      <p>Brekkuheiði er frístundabyggð í <strong>Brekkuskógi</strong> í Bláskógabyggð (Biskupstungum), umvafin skógrækt og náttúru við ána Brúará. Hér eru rúmgóðar sumarhúsalóðir í grónu, skjólsælu landi.</p>
-      <p>Stutt er í helstu náttúruperlur Suðurlands og alla þjónustu — Gullni hringurinn liggur við túnfótinn. Lóðamörkin eru afmörkuð með landmældum hnitum og hægt að skoða hverja lóð á gagnvirku gervihnattakorti.</p>
-    </div>
+
   </div>
 </section>
 
 <!-- Stats -->
-<section class="section section-green">
+<section class="section section-green" id="stats">
   <div class="wrap">
-    <div class="stats reveal">
-      <div class="stat"><div class="num">23</div><div class="lbl">Lóðir til sölu</div></div>
-      <div class="stat"><div class="num">~4.000 m²</div><div class="lbl">Meðalstærð lóðar</div></div>
-      <div class="stat"><div class="num">28</div><div class="lbl">Seldar lóðir</div></div>
+    <div class="stat2-grid reveal">
+
+      <div class="stat2-item" style="--stat2-delay:0ms">
+        <span class="stat2-index">01</span>
+        <span class="stat2-figure">
+          <span class="stat2-num" data-stat-to="23" data-stat-type="int">23</span>
+        </span>
+        <span class="stat2-rule" aria-hidden="true"></span>
+        <span class="stat2-lbl">Lóðir til sölu</span>
+      </div>
+
+      <div class="stat2-item" style="--stat2-delay:140ms">
+        <span class="stat2-index">02</span>
+        <span class="stat2-figure">
+          <span class="stat2-num" data-stat-to="5000" data-stat-type="area" data-stat-prefix="~">~5.000</span><span class="stat2-unit" aria-hidden="true">m²</span>
+        </span>
+        <span class="stat2-rule" aria-hidden="true"></span>
+        <span class="stat2-lbl">Flestar lóðir · ½ ha</span>
+      </div>
+
+      <div class="stat2-item" style="--stat2-delay:280ms">
+        <span class="stat2-index">03</span>
+        <span class="stat2-figure">
+          <span class="stat2-num" data-stat-to="28" data-stat-type="int">28</span>
+        </span>
+        <span class="stat2-rule" aria-hidden="true"></span>
+        <span class="stat2-lbl">Seldar lóðir</span>
+      </div>
+
+    </div>
+
+    <div class="keyfeat reveal">
+      <article class="kf"><h3>Rúmgóðar lóðir</h3><p>Flestar ½ ha (~5.000 m²) · leigulóðir til 25 ára, opið fyrir sölu.</p></article>
+      <article class="kf"><h3>Lokað svæði</h3><p>Aksturshlið — aðgangur eigenda og leigutaka.</p></article>
+      <article class="kf"><h3>Klæddir vegir</h3><p>Allir stofnvegir klæddir olíumöl.</p></article>
+      <article class="kf"><h3>Fullar veitur</h3><p>Rafmagn, heitt og kalt vatn um allt hverfið.</p></article>
+      <article class="kf"><h3>Náttúra</h3><p>Stutt í Brúarárfoss, Brúarárskörð o.fl.</p></article>
     </div>
   </div>
 </section>
@@ -77,7 +135,11 @@
 <section class="section section-cream">
   <div class="wrap feature reveal">
     <div class="feature-media">
-      <a href="kort.html"><img src="assets/aerial2.jpg" alt="Loftmynd af Brekkuheiði frístundabyggð"></a>
+      <a href="kort.html" class="fm-video" aria-label="Opna lóðakort">
+        <video autoplay loop muted playsinline preload="auto" poster="assets/kort_poster.jpg">
+          <source src="assets/kort_video.mp4" type="video/mp4">
+        </video>
+      </a>
     </div>
     <div class="feature-body">
       <div class="eyebrow">Lóðakort</div>
@@ -89,6 +151,22 @@
         <li><span class="dot" style="background:var(--sidari)"></span> Síðari áfangi</li>
       </ul>
       <a class="btn btn-primary" href="kort.html">Opna lóðakort</a>
+    </div>
+  </div>
+</section>
+
+<!-- Lot -> house showcase -->
+<section class="section section-green" id="moguleikar">
+  <div class="wrap reveal">
+    <div class="section-head center">
+      <div class="eyebrow light">Þín lóð</div>
+      <h2>Frá lóð að sumarhúsi</h2>
+      <p class="section-lead">Lóðirnar eru deiliskipulagðar fyrir sumarhús. Sjáðu hvernig draumahúsið getur risið á þínum stað — frá auðri lóð að fullbúnu húsi.</p>
+    </div>
+    <div class="video-showcase">
+      <video autoplay loop muted playsinline preload="auto" poster="assets/moguleikar_poster.jpg">
+        <source src="assets/moguleikar.mp4" type="video/mp4">
+      </video>
     </div>
   </div>
 </section>
@@ -145,32 +223,25 @@
   </div>
 </section>
 
-<!-- Video feature -->
-<section class="section section-cream2">
-  <div class="wrap feature reveal">
-    <div class="feature-media">
-      <video autoplay muted loop playsinline controls preload="auto" poster="assets/aerial2.jpg">
-        <source src="assets/hero.mp4" type="video/mp4">
-      </video>
-    </div>
-    <div class="feature-body">
-      <div class="eyebrow">Myndband</div>
-      <h2>Brekkuheiði í mynd</h2>
-      <p>Fáðu tilfinningu fyrir umhverfinu, gróðrinum og nálægðinni við náttúruna — skoðaðu svæðið í stuttu myndbandi.</p>
-      <a class="btn btn-primary" href="kort.html">Skoða lóðakort</a>
-    </div>
-  </div>
-</section>
-
-<!-- CTA band -->
-<section class="cta-band" style="--hero:url('assets/aerial1.jpg')">
+<!-- Contact form -->
+<section class="cta-band" id="hafa-samband" style="--hero:url('assets/aerial1.jpg')">
   <div class="wrap cta-inner reveal">
+    <div class="eyebrow light">Hafa samband</div>
     <h2>Áhugasöm um lóð í Brekkuheiði?</h2>
-    <p>Hafðu samband fyrir nánari upplýsingar um lausar lóðir, verð og skilmála.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="hafa-samband.html">Hafa samband</a>
-      <a class="btn btn-ghost" href="kort.html">Skoða lóðakort</a>
-    </div>
+    <p>Fylltu út formið og við svörum fyrirspurnum um lausar lóðir, verð og skilmála.</p>
+    <form class="contact-form" id="contactForm" data-to="netfang@brekkuheidi.is">
+      <div class="cf-row">
+        <label>Nafn<input type="text" name="nafn" autocomplete="name" required></label>
+        <label>Netfang<input type="email" name="netfang" autocomplete="email" required></label>
+      </div>
+      <div class="cf-row">
+        <label>Sími<input type="tel" name="simi" autocomplete="tel"></label>
+        <label>Lóð / áhugasvið<input type="text" name="lod" placeholder="t.d. Brekkuheiði 27"></label>
+      </div>
+      <label>Skilaboð<textarea name="skilabod" rows="5" required></textarea></label>
+      <button type="submit" class="btn btn-light">Senda fyrirspurn</button>
+      <p class="cf-note" id="cfNote"></p>
+    </form>
   </div>
 </section>
 
@@ -188,7 +259,7 @@
       <a href="kort.html">Lóðakort</a>
       <a href="um-svaedid.html">Um svæðið</a>
       <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-      <a href="hafa-samband.html">Hafa samband</a>
+      <a href="#hafa-samband">Hafa samband</a>
     </nav>
     <div class="footer-contact">
       <div class="fn-h">Hafa samband</div>
@@ -215,7 +286,7 @@
     <a href="kort.html">Lóðakort</a>
     <a href="um-svaedid.html">Um svæðið</a>
     <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-    <a href="hafa-samband.html">Hafa samband</a>
+    <a href="#hafa-samband">Hafa samband</a>
   </nav>
   <div class="mfoot">Brekkuheiði · Frístundabyggð<br>Bláskógabyggð</div>
 </nav>

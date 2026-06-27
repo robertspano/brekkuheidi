@@ -12,19 +12,6 @@ const fmt = n => (n==null?null:String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'));
 let DATA, map, selected=null, hovered=null, homeView=null;
 const filter = new Set(ORDER);
 
-/* ---- loader: status line (the bar animates indefinitely via CSS) ---- */
-const LOADER_MIN_MS = 2400;            // keep the loading screen up at least this long
-const _loaderStart = performance.now();
-let _loaderHidden = false;
-function loadStatus(msg){ const st=$('#loader .loader-status'); if(st) st.textContent=msg; }
-function hideLoader(){
-  if(_loaderHidden) return;
-  const wait = LOADER_MIN_MS - (performance.now() - _loaderStart);
-  if(wait > 0){ setTimeout(hideLoader, wait); return; }   // don't flash away too fast
-  _loaderHidden = true;
-  $('#loader').classList.add('hide');
-}
-
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
   $('#loader').innerHTML='<div class="word">Villa við að hlaða gögnum</div>'; console.error(e);
 });
@@ -51,7 +38,6 @@ function bounds(){
 
 function init(d){
   DATA=d;
-  loadStatus('Undirbý lóðakort…');
   whenSized(document.getElementById('viewport'), buildMap);
 }
 function whenSized(el, cb){
@@ -62,7 +48,6 @@ function whenSized(el, cb){
 }
 
 function buildMap(){
-  loadStatus('Sæki gervihnattamyndir…');
   const c=bounds().getCenter();
   map = new maplibregl.Map({
     container:'viewport', attributionControl:false,
@@ -87,7 +72,7 @@ function buildMap(){
     catch(e){ setTimeout(poll,250); } };
   setTimeout(poll, 600);
   new ResizeObserver(()=>map.resize()).observe(document.getElementById('viewport'));
-  setTimeout(hideLoader, 9000); // safety only
+  setTimeout(()=>$('#loader').classList.add('hide'), 9000); // safety only
 }
 
 function onMapLoad(){
@@ -152,14 +137,14 @@ function introSequence(){
   startOrbitLoop();
   applyPlotPaint(0,0);                 // segmentation hidden
   const h=computeHome();
-  if(!h){ hideLoader(); revealPlots(); return; }
+  if(!h){ $('#loader').classList.add('hide'); revealPlots(); return; }
   // start zoomed all the way out (whole of Iceland), flat
   const start={ center:h.center, zoom:4.6, pitch:0, bearing:0 };
   setInteractive(false);
   map.jumpTo(start);
   // hide loader as soon as the wide view has imagery, then start the zoom right away
   onceIdle(()=>{
-    hideLoader();
+    $('#loader').classList.add('hide');
     map.flyTo({ ...h, duration:4000, curve:1.55, essential:true, easing:easeInOut });
     let revealed=false;
     const doReveal=()=>{ if(revealed) return; revealed=true; setInteractive(true); revealPlots(); };
@@ -284,9 +269,11 @@ function openInfo(p){
     <div class="spec"><span class="k">Staða</span><span class="v"><span class="status-dot" style="background:${COLORS[p.status]}"></span>${LABELS[p.status]}</span></div>
     <div class="spec"><span class="k">Fermetrar</span><span class="v">${ferm}</span></div>
     <div class="spec"><span class="k">Verð</span><span class="v">${verd}</span></div>
-    <div class="spec"><span class="k">Byggingarmagn</span><span class="v">${dash(p.byggingarmagn)}</span></div>
     <div class="spec"><span class="k">Fasteignanúmer</span><span class="v">${dash(p.fasteignanr)}</span></div>
-    <a class="info-cta" href="hafa-samband.html">Hafa samband</a>`;
+    <a class="info-cta" href="index.html#hafa-samband">Hafa samband</a>`;
+  // carry the plot's address to the contact form so the visitor doesn't retype it
+  const cta=$('#infoBody').querySelector('.info-cta');
+  if(cta) cta.addEventListener('click',()=>{ try{ sessionStorage.setItem('bh_lod', plotTitle(p)); }catch(e){} });
   $('#info').classList.add('open');
 }
 function closeInfo(){

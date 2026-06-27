@@ -8,23 +8,40 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&display=swap" rel="stylesheet">
-<link href="assets/vendor/maplibre-gl.css" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
 <!-- Loading -->
 <div class="loader" id="loader">
-  <div class="loader-inner">
-    <svg class="mark" width="60" viewBox="0 0 120 70" fill="none" aria-hidden="true">
-      <path d="M6 60 L40 14 L60 40 L78 20 L114 60 Z" fill="#fff"/>
-      <path d="M40 14 L52 31 L46 36 L36 24 Z" fill="#3E6044"/>
-      <path d="M78 20 L88 33 L82 38 L73 28 Z" fill="#3E6044"/>
+  <div class="ld-stage" aria-label="Brekkuheiði — frístundabyggð">
+    <svg class="ld-topo" viewBox="0 0 600 600" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+      <!-- faint centroid cross-hairs (surveyor's registration mark) -->
+      <g class="ld-cross" stroke="var(--cream)" stroke-width="1" vector-effect="non-scaling-stroke">
+        <line x1="300" y1="150" x2="300" y2="450"/>
+        <line x1="150" y1="300" x2="450" y2="300"/>
+      </g>
+      <path class="ld-r6" d="M524.4 300.0C523.5 327.8 507.3 354.1 495.5 382.1C483.8 410.1 476.4 443.8 453.7 468.0C431.0 492.2 394.3 520.0 359.5 527.3C324.7 534.5 278.0 523.9 244.6 511.6C211.2 499.4 180.0 476.5 159.3 453.8C138.6 431.1 131.7 401.0 120.5 375.4C109.3 349.7 100.1 328.4 92.2 300.0C84.4 271.6 65.5 234.1 73.3 204.8C81.1 175.5 110.4 143.0 139.1 124.1C167.7 105.1 209.7 95.7 245.3 91.2C281.0 86.8 320.9 87.7 353.1 97.3C385.2 106.9 413.5 129.2 438.2 148.9C462.9 168.6 486.9 190.3 501.3 215.5C515.7 240.7 525.4 272.2 524.4 300.0Z"/>
+      <path class="ld-r5" d="M492.6 300.0C491.9 323.1 476.0 346.9 463.6 368.3C451.2 389.7 437.6 410.4 418.1 428.4C398.6 446.5 374.1 467.7 346.5 476.5C318.8 485.3 282.2 486.5 252.3 481.2C222.4 476.0 186.9 463.3 166.8 444.8C146.8 426.3 137.1 394.3 132.1 370.1C127.2 346.0 136.7 323.3 137.0 300.0C137.3 276.7 128.1 253.9 133.7 230.6C139.4 207.2 151.4 178.5 171.1 159.8C190.9 141.2 223.0 125.4 252.3 118.8C281.7 112.3 319.5 111.9 347.2 120.5C375.0 129.2 398.7 152.6 418.8 170.8C438.9 189.0 455.4 208.4 467.7 229.9C480.0 251.5 493.3 276.9 492.6 300.0Z"/>
+      <path class="ld-r4" d="M456.6 300.0C456.2 319.0 446.7 339.5 436.4 356.6C426.1 373.7 411.6 389.6 394.8 402.6C378.0 415.5 357.4 428.4 335.5 434.3C313.6 440.2 287.9 440.4 263.5 438.0C239.1 435.6 208.9 432.2 189.1 420.0C169.2 407.8 150.1 384.7 144.2 364.7C138.3 344.7 148.9 319.5 153.8 300.0C158.7 280.5 164.6 264.3 173.4 247.4C182.2 230.6 191.5 213.3 206.5 198.8C221.4 184.3 240.7 168.8 263.0 160.3C285.3 151.8 316.7 143.3 340.3 147.8C363.9 152.2 388.1 171.2 404.5 187.0C420.9 202.8 429.8 223.6 438.5 242.5C447.2 261.3 456.9 281.0 456.6 300.0Z"/>
+      <path class="ld-r3" d="M424.9 300.0C423.3 315.4 415.5 330.9 407.2 344.2C398.8 357.6 387.9 370.2 374.6 380.2C361.4 390.2 344.7 400.5 327.7 404.2C310.8 407.8 291.1 404.8 272.8 402.2C254.5 399.5 234.6 396.4 218.0 388.1C201.4 379.8 181.3 367.0 173.3 352.3C165.2 337.6 166.6 316.1 169.9 300.0C173.2 283.9 182.9 268.3 193.0 255.8C203.1 243.4 216.9 234.0 230.4 225.2C244.0 216.5 257.6 209.7 274.2 203.2C290.9 196.8 311.4 185.8 330.3 186.3C349.1 186.8 372.9 195.3 387.2 206.2C401.6 217.2 410.2 236.3 416.5 251.9C422.7 267.6 426.4 284.6 424.9 300.0Z"/>
+      <path class="ld-r2" d="M399.1 300.0C397.5 311.8 389.1 323.8 381.7 333.5C374.3 343.2 364.8 351.0 354.6 358.3C344.4 365.5 333.1 374.1 320.6 376.9C308.2 379.8 292.8 378.0 279.8 375.4C266.7 372.9 254.0 368.0 242.3 361.6C230.6 355.2 216.8 347.3 209.7 337.0C202.6 326.7 199.1 312.2 199.4 300.0C199.8 287.8 204.3 273.8 211.7 263.8C219.2 253.9 232.5 245.6 244.2 240.4C255.9 235.3 269.3 235.3 282.0 232.8C294.6 230.2 306.6 225.1 320.1 225.1C333.6 225.1 351.1 226.5 363.1 232.7C375.0 238.9 385.6 251.2 391.7 262.4C397.7 273.7 400.8 288.2 399.1 300.0Z"/>
+      <path class="ld-r1" d="M370.9 300.0C370.8 308.1 365.4 317.7 359.9 324.3C354.3 331.0 345.3 335.3 337.6 339.7C329.9 344.1 322.3 348.9 313.7 350.7C305.2 352.6 295.0 352.6 286.2 351.0C277.5 349.3 268.8 345.5 261.3 341.0C253.8 336.5 245.7 330.7 241.2 323.9C236.6 317.1 234.3 308.2 233.9 300.0C233.4 291.8 234.4 282.4 238.4 275.0C242.4 267.6 250.0 259.5 258.1 255.6C266.1 251.7 277.8 252.0 286.9 251.6C296.0 251.1 304.1 251.7 312.7 252.9C321.4 254.1 330.9 255.1 338.9 258.9C346.8 262.6 355.1 268.6 360.5 275.4C365.8 282.3 371.0 291.9 370.9 300.0Z"/>
+      <path class="ld-r0" d="M338.6 300.0C339.4 304.5 338.4 310.4 335.7 314.3C333.1 318.3 327.3 321.3 322.6 323.6C317.9 326.0 312.8 327.6 307.8 328.3C302.7 329.0 297.3 328.8 292.4 327.8C287.5 326.8 282.7 324.9 278.5 322.5C274.3 320.0 269.7 316.9 267.3 313.1C264.9 309.4 264.0 304.4 263.9 300.0C263.8 295.6 264.6 290.8 266.6 286.6C268.6 282.4 271.5 277.3 275.7 274.6C279.9 271.9 286.6 270.7 291.9 270.4C297.2 270.1 302.7 271.3 307.5 272.7C312.3 274.0 316.7 276.0 320.6 278.4C324.5 280.9 327.9 284.0 330.9 287.6C333.9 291.2 337.8 295.5 338.6 300.0Z"/>
     </svg>
-    <div class="word">Brekkuheiði</div>
-    <div class="sub">FRÍSTUNDABYGGÐ</div>
-    <div class="loader-bar"><span></span></div>
-    <div class="loader-status">Hleð gervihnattakorti…</div>
+    <div class="ld-core">
+      <svg class="ld-peaks" viewBox="0 0 120 70" fill="none" aria-hidden="true">
+        <path d="M6 60 L40 14 L60 40 L78 20 L114 60 Z" fill="var(--cream)"/>
+        <path d="M40 14 L52 31 L46 36 L36 24 Z" fill="var(--green)"/>
+        <path d="M78 20 L88 33 L82 38 L73 28 Z" fill="var(--green)"/>
+      </svg>
+      <div class="ld-wordwrap">
+        <h1 class="ld-word">Brekkuheiði</h1>
+        <span class="ld-sheen" aria-hidden="true"></span>
+      </div>
+      <p class="ld-sub">FRÍSTUNDABYGGÐ · LANDMÆLD LÓÐAMÖRK</p>
+    </div>
   </div>
 </div>
 
@@ -40,7 +57,7 @@
     <span class="word">Brekkuheiði</span>
     <span class="sub">FRÍSTUNDABYGGÐ</span>
   </a>
-  <a class="contact-link" href="hafa-samband.html">Hafa samband</a>
+  <a class="contact-link" href="index.html#hafa-samband">Hafa samband</a>
 </header>
 
 <!-- Edit bar -->
@@ -111,13 +128,13 @@
     <a href="kort.html">Lóðakort</a>
     <a href="um-svaedid.html">Um svæðið</a>
     <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-    <a href="hafa-samband.html">Hafa samband</a>
+    <a href="index.html#hafa-samband">Hafa samband</a>
   </nav>
   <div class="mfoot">Brekkuheiði · Frístundabyggð<br>Bláskógabyggð</div>
 </nav>
 
 <div class="align-readout" id="alignReadout"></div>
-<script src="assets/vendor/maplibre-gl.js"></script>
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

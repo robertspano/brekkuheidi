@@ -12,7 +12,7 @@
 </head>
 <body class="scrollable site">
 
-<header class="topbar site-header" id="topbar">
+<header class="topbar site-header solid" id="topbar">
   <a class="brand-inline" href="index.html">
     <svg class="mark" viewBox="0 0 120 70" fill="none" aria-hidden="true">
       <path d="M6 60 L40 14 L60 40 L78 20 L114 60 Z" fill="#fff"/>
@@ -26,30 +26,27 @@
     <a href="kort.html">Lóðakort</a>
     <a href="um-svaedid.html" class="active">Um svæðið</a>
     <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-    <a href="hafa-samband.html" class="nav-cta">Hafa samband</a>
+    <a href="index.html#hafa-samband" class="nav-cta">Hafa samband</a>
   </nav>
   <button class="menu-btn nav-burger" id="menuOpen"><span class="bars"><span></span><span></span></span> Valmynd</button>
 </header>
 
-<!-- Page hero -->
-<section class="page-hero" style="--hero:url('assets/aerial2.jpg')">
-  <div class="wrap reveal">
-    <div class="eyebrow light">Um svæðið</div>
-    <h1>Brekkuskógur í Biskupstungum</h1>
-    <p class="page-hero-sub">Gróðursælt frístundasvæði við Brúará, í hjarta Gullna hringsins.</p>
-  </div>
-</section>
-
-<!-- Náttúra -->
-<section class="section section-cream">
-  <div class="wrap intro-grid reveal">
-    <div>
-      <div class="eyebrow">Náttúran</div>
-      <h2>Skjól, skógur og Brúará</h2>
+<!-- Um svæðið — clean editorial intro (no image) -->
+<section class="section section-cream um-intro">
+  <div class="wrap reveal um-intro-grid">
+    <div class="um-intro-head">
+      <div class="eyebrow">Um svæðið</div>
+      <h1 class="um-h1">Brekkuskógur í Biskupstungum</h1>
+      <span class="um-rule" aria-hidden="true"></span>
+      <ul class="um-meta" aria-label="Staðsetning">
+        <li>Bláskógabyggð</li>
+        <li>Biskupstungur</li>
+        <li>Suðurland</li>
+      </ul>
     </div>
-    <div class="intro-text">
-      <p>Brekkuskógur er gróðursælt frístundasvæði í Biskupstungum í Bláskógabyggð, þekkt fyrir skógrækt, kyrrð og fallegt umhverfi. Lóðirnar liggja í skjólsælu, grónu landi þar sem stutt er í gönguleiðir og náttúru.</p>
-      <p>Áin <strong>Brúará</strong> rennur skammt frá svæðinu og þar undir er <strong>Brúarfoss</strong> — einn fegursti foss landsins með sínum einkennandi túrkisbláa lit. Svæðið er kjörið til útivistar allan ársins hring.</p>
+    <div class="um-intro-body">
+      <p class="um-lead">Gróðursælt frístundasvæði í hjarta Gullna hringsins, þekkt fyrir skógrækt, kyrrð og fallegt umhverfi. Lóðirnar liggja í skjólsælu, grónu landi þar sem stutt er í gönguleiðir og náttúru.</p>
+      <p class="um-p">Áin <strong>Brúará</strong> rennur skammt frá svæðinu og þar undir er <strong>Brúarfoss</strong> — einn fegursti foss landsins með sínum einkennandi túrkisbláa lit. Svæðið er kjörið til útivistar allan ársins hring.</p>
     </div>
   </div>
 </section>
@@ -58,14 +55,18 @@
 <section class="section section-cream2">
   <div class="wrap feature reverse reveal">
     <div class="feature-media">
-      <img src="assets/skipulag.jpg" alt="Deiliskipulag Brekkuheiðar — lóðir afmarkaðar með gulum línum" class="plan-img">
+      <div class="plan-video">
+        <video autoplay loop muted playsinline preload="auto" poster="assets/skipulag_poster.jpg">
+          <source src="assets/skipulag_video.mp4" type="video/mp4">
+        </video>
+      </div>
     </div>
     <div class="feature-body">
       <div class="eyebrow">Skipulag</div>
       <h2>Afmarkaðar lóðir á réttum stað</h2>
       <p>Lóðirnar eru afmarkaðar samkvæmt samþykktu deiliskipulagi. Hver lóð hefur landmæld hnit úr fasteignaskrá og er sýnd á réttum stað á gervihnattakortinu — ekki teiknað eftir auga.</p>
       <ul class="check-list">
-        <li>Lóðir í Brekkuheiði og við Vallárveg eru að jafnaði um <strong>4.000 m²</strong>.</li>
+        <li>Flestar lóðir eru um <strong>½ hektari (~5.000 m²)</strong> — leigulóðir til 25 ára, opið fyrir sölu eða annað.</li>
         <li>Staða hverrar lóðar er litamerkt: til sölu, seld eða síðari áfangi.</li>
         <li>Hægt er að skoða stærð og fasteignanúmer hverrar lóðar á kortinu.</li>
       </ul>
@@ -123,18 +124,6 @@
   </div>
 </section>
 
-<!-- CTA band -->
-<section class="cta-band" style="--hero:url('assets/aerial1.jpg')">
-  <div class="wrap cta-inner reveal">
-    <h2>Skoðaðu lausar lóðir</h2>
-    <p>Allar lóðir á réttum, landmældum stað — litmerktar eftir stöðu.</p>
-    <div class="hero-cta">
-      <a class="btn btn-primary" href="kort.html">Opna lóðakort</a>
-      <a class="btn btn-ghost" href="hafa-samband.html">Hafa samband</a>
-    </div>
-  </div>
-</section>
-
 <!-- Footer -->
 <footer class="site-footer">
   <div class="wrap footer-grid">
@@ -149,7 +138,7 @@
       <a href="kort.html">Lóðakort</a>
       <a href="um-svaedid.html">Um svæðið</a>
       <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-      <a href="hafa-samband.html">Hafa samband</a>
+      <a href="index.html#hafa-samband">Hafa samband</a>
     </nav>
     <div class="footer-contact">
       <div class="fn-h">Hafa samband</div>
@@ -176,7 +165,7 @@
     <a href="kort.html">Lóðakort</a>
     <a href="um-svaedid.html">Um svæðið</a>
     <a href="spurt-og-svarad.html">Spurt &amp; svarað</a>
-    <a href="hafa-samband.html">Hafa samband</a>
+    <a href="index.html#hafa-samband">Hafa samband</a>
   </nav>
   <div class="mfoot">Brekkuheiði · Frístundabyggð<br>Bláskógabyggð</div>
 </nav>
