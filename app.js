@@ -42,7 +42,7 @@ function bounds(){
 
 function init(d){
   DATA=d;
-  loadSet(35, 'Undirbý lóðakort…');
+  loadStatus('Undirbý lóðakort…');
   whenSized(document.getElementById('viewport'), buildMap);
 }
 function whenSized(el, cb){
@@ -53,7 +53,7 @@ function whenSized(el, cb){
 }
 
 function buildMap(){
-  loadSet(58, 'Sæki gervihnattamyndir…');
+  loadStatus('Sæki gervihnattamyndir…');
   const c=bounds().getCenter();
   map = new maplibregl.Map({
     container:'viewport', attributionControl:false,
