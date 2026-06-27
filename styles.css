@@ -227,7 +227,7 @@ body.edit .edit-bar{display:flex}
 .loader{position:fixed;inset:0;z-index:90;display:flex;align-items:center;justify-content:center;
   background:linear-gradient(180deg,rgba(20,34,24,.72) 0%,rgba(14,22,16,.9) 100%),
     url('assets/aerial1.jpg') center/cover no-repeat;
-  background-color:var(--green);transition:opacity .6s}
+  background-color:var(--green);transition:opacity .8s ease}
 .loader.hide{opacity:0;pointer-events:none}
 .loader-inner{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;padding:0 24px}
 .loader .mark{filter:drop-shadow(0 3px 16px rgba(0,0,0,.5))}
@@ -236,7 +236,7 @@ body.edit .edit-bar{display:flex}
 .loader-bar{margin-top:24px;width:210px;height:3px;border-radius:99px;background:rgba(255,255,255,.22);overflow:hidden}
 .loader-bar span{display:block;width:42%;height:100%;border-radius:99px;
   background:linear-gradient(90deg,rgba(255,255,255,.3),#fff,rgba(255,255,255,.3));
-  animation:loadbar 1.25s ease-in-out infinite}
+  animation:loadbar 1.9s ease-in-out infinite}
 .loader-status{margin-top:14px;font-family:var(--eyebrow);font-size:10px;letter-spacing:.24em;
   text-transform:uppercase;color:#fff;opacity:.72}
 @keyframes loadbar{0%{transform:translateX(-130%)}100%{transform:translateX(320%)}}
