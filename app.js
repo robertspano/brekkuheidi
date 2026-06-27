@@ -12,6 +12,10 @@ const fmt = n => (n==null?null:String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'));
 let DATA, map, selected=null, hovered=null, homeView=null;
 const filter = new Set(ORDER);
 
+/* ---- loader: status line (the bar animates indefinitely via CSS) ---- */
+function loadStatus(msg){ const st=$('#loader .loader-status'); if(st) st.textContent=msg; }
+function hideLoader(){ $('#loader').classList.add('hide'); }
+
 fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
   $('#loader').innerHTML='<div class="word">Villa við að hlaða gögnum</div>'; console.error(e);
 });
@@ -38,6 +42,7 @@ function bounds(){
 
 function init(d){
   DATA=d;
+  loadSet(35, 'Undirbý lóðakort…');
   whenSized(document.getElementById('viewport'), buildMap);
 }
 function whenSized(el, cb){
@@ -48,6 +53,7 @@ function whenSized(el, cb){
 }
 
 function buildMap(){
+  loadSet(58, 'Sæki gervihnattamyndir…');
   const c=bounds().getCenter();
   map = new maplibregl.Map({
     container:'viewport', attributionControl:false,
@@ -72,7 +78,7 @@ function buildMap(){
     catch(e){ setTimeout(poll,250); } };
   setTimeout(poll, 600);
   new ResizeObserver(()=>map.resize()).observe(document.getElementById('viewport'));
-  setTimeout(()=>$('#loader').classList.add('hide'), 9000); // safety only
+  setTimeout(hideLoader, 9000); // safety only
 }
 
 function onMapLoad(){
@@ -137,14 +143,14 @@ function introSequence(){
   startOrbitLoop();
   applyPlotPaint(0,0);                 // segmentation hidden
   const h=computeHome();
-  if(!h){ $('#loader').classList.add('hide'); revealPlots(); return; }
+  if(!h){ hideLoader(); revealPlots(); return; }
   // start zoomed all the way out (whole of Iceland), flat
   const start={ center:h.center, zoom:4.6, pitch:0, bearing:0 };
   setInteractive(false);
   map.jumpTo(start);
   // hide loader as soon as the wide view has imagery, then start the zoom right away
   onceIdle(()=>{
-    $('#loader').classList.add('hide');
+    hideLoader();
     map.flyTo({ ...h, duration:4000, curve:1.55, essential:true, easing:easeInOut });
     let revealed=false;
     const doReveal=()=>{ if(revealed) return; revealed=true; setInteractive(true); revealPlots(); };
