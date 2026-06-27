@@ -2,6 +2,7 @@
    Lóðir = nákvæm landmæld hnit (Skipulagsstofnun/Loftmyndir, ISN93 -> WGS84). */
 (() => {
 const COLORS = { til_solu:'#7FFF00', fratekin:'#0fe3ff', seld:'#FF383C', sidari:'#B6B6B6' };
+const COLORS_HI = { til_solu:'#C6FF87', fratekin:'#86EEFF', seld:'#FF8082', sidari:'#EDEDED' }; // hover highlight
 const LABELS = { til_solu:'Til sölu', fratekin:'Frátekin', seld:'Seld', sidari:'Síðari áfangi' };
 const ORDER  = ['til_solu','fratekin','seld','sidari'];
 const HEIGHT = 12;
@@ -19,7 +20,7 @@ fetch('plots.json').then(r=>r.json()).then(init).catch(e=>{
 function plotsGeoJSON(){
   return { type:'FeatureCollection', features: DATA.plots.map(p=>({
     type:'Feature', id:p.id,
-    properties:{ id:p.id, status:p.status, color:COLORS[p.status], height:HEIGHT,
+    properties:{ id:p.id, status:p.status, color:COLORS[p.status], colorHi:COLORS_HI[p.status], height:HEIGHT,
                  street:p.street, number:p.number },
     geometry:{ type:'Polygon', coordinates: p.rings || [ p.ring ] } })) };
 }
@@ -27,7 +28,9 @@ function streetsGeoJSON(){
   const by={}; for(const p of DATA.plots){ if(p.street) (by[p.street]||=[]).push(p); }
   return { type:'FeatureCollection', features:Object.entries(by).map(([street,arr])=>{
     const cx=arr.reduce((s,p)=>s+p.clng,0)/arr.length, cy=arr.reduce((s,p)=>s+p.clat,0)/arr.length;
-    return { type:'Feature', properties:{name:street.toUpperCase()}, geometry:{type:'Point',coordinates:[cx,cy]} };
+    return { type:'Feature',
+      properties:{ name:street.toUpperCase(), count:arr.length, sort:-arr.length },  // bigger streets win collisions
+      geometry:{type:'Point',coordinates:[cx,cy]} };
   })};
 }
 function bounds(){
@@ -79,27 +82,36 @@ function onMapLoad(){
   map.addSource('plots', {type:'geojson', data:plotsGeoJSON(), promoteId:'id'});
   // plots start HIDDEN (height 0, opacity 0) — revealed after the fly-in arrives
   map.addLayer({ id:'plots-fill', type:'fill-extrusion', source:'plots',
-    paint:{ 'fill-extrusion-color':['get','color'],
+    paint:{ 'fill-extrusion-color':['case',['boolean',['feature-state','hover'],false],['get','colorHi'],['get','color']],
       'fill-extrusion-height':0, 'fill-extrusion-base':0, 'fill-extrusion-opacity':0 }});
   map.addLayer({ id:'plots-line', type:'line', source:'plots',
     paint:{'line-color':['get','color'], 'line-width':1.1, 'line-opacity':0}});
   try {
     map.addSource('streets',{type:'geojson', data:streetsGeoJSON()});
-    map.addLayer({ id:'streets', type:'symbol', source:'streets',
-      layout:{ 'text-field':['get','name'], 'text-font':['Noto Sans Regular'], 'text-size':13,
-        'text-letter-spacing':0.18, 'text-transform':'uppercase' },
-      paint:{ 'text-color':'#fff', 'text-halo-color':'rgba(20,30,18,.85)', 'text-halo-width':1.6, 'text-opacity':0 }});
+    map.addLayer({ id:'streets', type:'symbol', source:'streets', minzoom:12.6,
+      layout:{ 'text-field':['get','name'], 'text-font':['Noto Sans Regular'],
+        'text-size':['interpolate',['linear'],['zoom'], 13,11.5, 14.5,13.5, 16,16, 17.5,19],
+        'text-letter-spacing':0.14, 'text-max-width':9, 'text-padding':2,
+        'symbol-sort-key':['get','sort'],
+        'text-allow-overlap':true, 'text-ignore-placement':true },   // street names should always show
+      paint:{ 'text-color':'#ffffff', 'text-halo-color':'rgba(16,24,14,.92)',
+        'text-halo-width':2, 'text-halo-blur':0.3, 'text-opacity':0 }});
   } catch(e){ console.warn('street labels skipped', e); }
 
   wireMap(); bindUI(); updateLegendCounts();
   introSequence();
+  // safety: ensure street names are visible after the intro, whatever path the reveal took
+  setTimeout(()=>{ if(map.getLayer('streets') && !_focused){
+    map.setLayoutProperty('streets','visibility','visible');
+    map.setPaintProperty('streets','text-opacity',0.96);
+  } }, 6800);
 }
 
 /* set plot visuals at a given height/opacity (used for the reveal animation + hover) */
 function applyPlotPaint(h, op){
   if(!map.getLayer('plots-fill')) return;
   map.setPaintProperty('plots-fill','fill-extrusion-height',
-    ['case',['boolean',['feature-state','hover'],false], h+8, h]);
+    ['case',['boolean',['feature-state','hover'],false], h+18, h]);
   map.setPaintProperty('plots-fill','fill-extrusion-opacity', op);
   if(map.getLayer('plots-line')) map.setPaintProperty('plots-line','line-opacity', Math.min(0.9, op*1.5));
   if(map.getLayer('streets')) map.setPaintProperty('streets','text-opacity', op>0?Math.min(1, op/0.6):0);
