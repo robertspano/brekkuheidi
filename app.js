@@ -230,6 +230,7 @@ function bindUI(){
   const closeMenu=()=>{ $('#menu').classList.remove('open'); $('#scrim').classList.remove('open'); };
   $('#menuOpen').onclick=openMenu; $('#menuClose').onclick=closeMenu; $('#scrim').onclick=closeMenu;
   $('#infoClose').onclick=closeInfo; $('#dlData').onclick=downloadData;
+  setupSheetDrag();
   window.addEventListener('keydown',e=>{ if(/input|textarea/i.test(e.target.tagName)) return;
     if(e.key==='Escape'){ closeInfo(); closeMenu(); }
     if(e.key==='e'||e.key==='E') document.body.classList.toggle('edit'); });
@@ -308,13 +309,62 @@ function openInfo(p){
   // carry the plot's address to the contact form so the visitor doesn't retype it
   const cta=$('#infoFoot').querySelector('.info-cta');
   if(cta) cta.addEventListener('click',()=>{ try{ sessionStorage.setItem('bh_lod', plotTitle(p)); }catch(e){} });
-  $('#info').classList.add('open');
+  const _sheet=$('#info'); _sheet.style.transition=''; _sheet.style.height='';   // reset any drag-resize from a previous plot
+  _sheet.classList.add('open');
 }
 function closeInfo(){
+  $('#info').style.transition='';            // ensure the slide-down (transform) animates after a drag
   $('#info').classList.remove('open');
   if(selected!=null) map.setFeatureState({source:'plots',id:selected},{selected:false});
   selected=null;
   unfocus();
+}
+
+/* Draggable bottom sheet (mobile): drag the handle to resize between a peek
+   and full height, or flick it down to dismiss. Desktop is unaffected. */
+function setupSheetDrag(){
+  const sheet=$('#info'), head=sheet&&sheet.querySelector('.info-head');
+  if(!sheet||!head) return;
+  const VH=()=>window.innerHeight;
+  const isMobile=()=>window.innerWidth<=768;
+  let armed=false,dragging=false,startY=0,startH=0,lastY=0,lastT=0,vel=0;
+  head.style.touchAction='none';
+  head.addEventListener('pointerdown',e=>{
+    if(!isMobile()||!sheet.classList.contains('open')) return;
+    if(e.target.closest('.info-close')) return;          // let the ✕ button work normally
+    armed=true; dragging=false;
+    startY=e.clientY; startH=sheet.getBoundingClientRect().height;
+    lastY=e.clientY; lastT=e.timeStamp; vel=0;
+  });
+  head.addEventListener('pointermove',e=>{
+    if(!armed) return;
+    const dy=e.clientY-startY;
+    if(!dragging){
+      if(Math.abs(dy)<6) return;                         // movement threshold — taps still register
+      dragging=true; sheet.style.transition='none';
+      try{head.setPointerCapture(e.pointerId);}catch(_){}
+    }
+    const h=Math.max(0,Math.min(Math.round(VH()*0.52),startH-dy));   // drag down → shorter; up → taller (max 52vh)
+    sheet.style.height=h+'px';
+    vel=(e.clientY-lastY)/Math.max(1,e.timeStamp-lastT);
+    lastY=e.clientY; lastT=e.timeStamp;
+    e.preventDefault();
+  });
+  const end=e=>{
+    if(!armed) return; armed=false;
+    if(!dragging) return;                                // it was a tap, not a drag
+    dragging=false;
+    try{head.releasePointerCapture(e.pointerId);}catch(_){}
+    const V=VH(), h=sheet.getBoundingClientRect().height;
+    if(h<V*0.24||vel>0.5){                               // dragged low or flicked down → dismiss
+      sheet.style.transition=''; closeInfo(); return;
+    }
+    const PEEK=Math.round(V*0.36), FULL=Math.round(V*0.52);
+    sheet.style.transition='height .26s cubic-bezier(.4,0,.1,1)';
+    sheet.style.height=(h<(PEEK+FULL)/2?PEEK:FULL)+'px'; // snap to peek or full
+  };
+  head.addEventListener('pointerup',end);
+  head.addEventListener('pointercancel',end);
 }
 
 function updateLegendCounts(){
