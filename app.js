@@ -3,7 +3,7 @@
 (() => {
 const COLORS = { til_solu:'#7FFF00', fratekin:'#0fe3ff', seld:'#FF383C', sidari:'#B6B6B6' };
 const COLORS_HI = { til_solu:'#C6FF87', fratekin:'#86EEFF', seld:'#FF8082', sidari:'#EDEDED' }; // hover highlight
-const LABELS = { til_solu:'Til sölu', fratekin:'Frátekin', seld:'Seld', sidari:'Síðari áfangi' };
+const LABELS = { til_solu:'Laus', fratekin:'Frátekin', seld:'Ráðstafað', sidari:'Síðari áfangi' };
 const ORDER  = ['til_solu','fratekin','seld','sidari'];
 const HEIGHT = 12;
 const LABEL_MIN_ZOOM = 12.5;   // street names only show once zoomed into the area
@@ -275,7 +275,7 @@ function unfocus(){
 function plotDesc(p){
   const t=plotTitle(p);
   switch(p.status){
-    case 'til_solu': return `${t} er laus lóð til sölu í frístundabyggðinni Brekkuskógi, í fallegu umhverfi við Brúará í Biskupstungum. Hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
+    case 'til_solu': return `${t} er laus lóð í frístundabyggðinni Brekkuskógi — leigulóð til 25 ára, opið fyrir sölu eða annað. Í fallegu umhverfi við Brúará í Biskupstungum; hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
     case 'fratekin': return `${t} er frátekin. Hafðu samband fyrir nánari upplýsingar.`;
     case 'seld':     return `${t} er þegar ráðstafað.`;
     default:         return `Hafðu samband fyrir nánari upplýsingar um þessa lóð.`;
