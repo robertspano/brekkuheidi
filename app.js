@@ -1,4 +1,4 @@
-/* Brekkuheiði – gagnvirkt lóðakort á gervihnattakorti (MapLibre GL)
+/* Brekkuskógur – gagnvirkt lóðakort á gervihnattakorti (MapLibre GL)
    Lóðir = nákvæm landmæld hnit (Skipulagsstofnun/Loftmyndir, ISN93 -> WGS84). */
 (() => {
 const COLORS = { til_solu:'#7FFF00', fratekin:'#0fe3ff', seld:'#FF383C', sidari:'#B6B6B6' };
@@ -275,7 +275,7 @@ function unfocus(){
 function plotDesc(p){
   const t=plotTitle(p);
   switch(p.status){
-    case 'til_solu': return `${t} er laus lóð til sölu í frístundabyggðinni Brekkuheiði, í fallegu umhverfi við Brúará í Biskupstungum. Hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
+    case 'til_solu': return `${t} er laus lóð til sölu í frístundabyggðinni Brekkuskógi, í fallegu umhverfi við Brúará í Biskupstungum. Hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
     case 'fratekin': return `${t} er frátekin. Hafðu samband fyrir nánari upplýsingar.`;
     case 'seld':     return `${t} er þegar ráðstafað.`;
     default:         return `Hafðu samband fyrir nánari upplýsingar um þessa lóð.`;

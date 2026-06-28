@@ -1,4 +1,4 @@
-/* Brekkuheiði – shared behaviour for content pages
+/* Brekkuskógur – shared behaviour for content pages
    (Home, Um svæðið, Spurt & svarað, Hafa samband). The map page uses app.js. */
 (() => {
   const $  = s => document.querySelector(s);
@@ -114,7 +114,7 @@
       e.preventDefault();
       const d = new FormData(form);
       const to = form.dataset.to || '';
-      const subject = 'Fyrirspurn um lóð í Brekkuheiði';
+      const subject = 'Fyrirspurn um lóð í Brekkuskógi';
       const body = [
         `Nafn: ${d.get('nafn') || ''}`,
         `Netfang: ${d.get('netfang') || ''}`,
