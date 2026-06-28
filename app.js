@@ -289,11 +289,12 @@ function openInfo(p){
   // only show real, sourced data — anything unknown becomes a dash (—)
   const verd = p.verd!=null ? fmt(p.verd)+' kr.' : 'Hafðu samband';
   const ferm = p.area_m2!=null ? fmt(p.area_m2)+' m²' : '—';
+  const haTxt = p.area_m2!=null ? ' · '+(p.area_m2/10000).toFixed(2).replace('.',',')+' ha' : '';
   $('#infoBody').innerHTML=`
     <h2 class="info-title">${plotTitle(p)}</h2>
     <p class="info-desc">${plotDesc(p)}</p>
     <div class="spec"><span class="k">Staða</span><span class="v"><span class="status-dot" style="background:${COLORS[p.status]}"></span>${LABELS[p.status]}</span></div>
-    <div class="spec"><span class="k">Fermetrar</span><span class="v">${ferm}</span></div>
+    <div class="spec"><span class="k">Stærð</span><span class="v">${ferm}${haTxt}</span></div>
     <div class="spec"><span class="k">Verð</span><span class="v">${verd}</span></div>
     <div class="spec"><span class="k">Fasteignanúmer</span><span class="v">${dash(p.fasteignanr)}</span></div>
     <a class="info-cta" href="index.html#hafa-samband">Hafa samband</a>`;
