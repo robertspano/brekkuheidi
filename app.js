@@ -303,10 +303,10 @@ function openInfo(p){
     <div class="spec"><span class="k">Staða</span><span class="v"><span class="status-dot" style="background:${COLORS[p.status]}"></span>${LABELS[p.status]}</span></div>
     <div class="spec"><span class="k">Stærð</span><span class="v">${ferm}${haTxt}</span></div>
     <div class="spec"><span class="k">Verð</span><span class="v">${verd}</span></div>
-    <div class="spec"><span class="k">Fasteignanúmer</span><span class="v">${dash(p.fasteignanr)}</span></div>
-    <a class="info-cta" href="index.html#hafa-samband">Hafa samband</a>`;
+    <div class="spec"><span class="k">Fasteignanúmer</span><span class="v">${dash(p.fasteignanr)}</span></div>`;
+  $('#infoFoot').innerHTML=`<a class="info-cta" href="index.html#hafa-samband">Hafa samband</a>`;
   // carry the plot's address to the contact form so the visitor doesn't retype it
-  const cta=$('#infoBody').querySelector('.info-cta');
+  const cta=$('#infoFoot').querySelector('.info-cta');
   if(cta) cta.addEventListener('click',()=>{ try{ sessionStorage.setItem('bh_lod', plotTitle(p)); }catch(e){} });
   $('#info').classList.add('open');
 }

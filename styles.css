@@ -172,7 +172,8 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .info-head .t{font-family:var(--eyebrow);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600}
 .info-close{width:30px;height:30px;display:flex;align-items:center;justify-content:center;font-size:20px;opacity:.9}
 .info-close:hover{opacity:.6}
-.info-body{padding:24px 24px 30px;overflow:auto}
+.info-body{padding:24px 24px 22px;overflow:auto;flex:1 1 auto;min-height:0}
+.info-foot{flex:none;padding:16px 24px 20px;border-top:1px solid var(--line);background:var(--cream)}
 .info-photo{
   width:100%;aspect-ratio:16/10;border-radius:6px;background:#d9d6c4 center/cover no-repeat;
   margin-bottom:20px;
@@ -186,7 +187,7 @@ button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit
 .spec .v{font-family:var(--serif);font-size:17px}
 .spec .v .status-dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:baseline}
 .info-cta{
-  display:block;width:100%;margin-top:22px;padding:15px;text-align:center;
+  display:block;width:100%;margin-top:0;padding:15px;text-align:center;
   background:var(--green);color:#fff;border-radius:4px;
   font-family:var(--eyebrow);font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
   transition:background .2s;
@@ -267,7 +268,7 @@ body.edit .edit-bar{display:flex}
   .info-drawer{
     top:auto; right:0; left:0; bottom:0;
     width:100%; max-width:none; height:auto;
-    max-height:72vh; max-height:72dvh;
+    max-height:52vh; max-height:52dvh;
     transform:translateY(110%);
     border-radius:20px 20px 0 0;
     box-shadow:0 -16px 46px rgba(0,0,0,.4);
@@ -277,13 +278,14 @@ body.edit .edit-bar{display:flex}
   .info-head::before{content:""; position:absolute; top:7px; left:50%; transform:translateX(-50%);
     width:42px; height:4px; border-radius:2px; background:rgba(255,255,255,.5)}
   .info-body{flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
-    padding:14px 20px calc(18px + env(safe-area-inset-bottom))}
-  .info-title{font-size:22px; margin:0 0 5px}
+    padding:14px 20px 14px}
+  .info-title{display:none}            /* head already shows the plot name — avoid duplicate */
   .info-desc{font-size:13px; line-height:1.5; margin:0 0 12px}
   .spec{padding:10px 0}
   .spec .k{font-size:10.5px}
   .spec .v{font-size:16px}
-  .info-cta{margin-top:16px; padding:14px}
+  .info-foot{padding:12px 20px calc(12px + env(safe-area-inset-bottom))}
+  .info-cta{padding:14px}
   .legend-toggle .lt-label{gap:18px}
 }
 
