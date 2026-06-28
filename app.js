@@ -282,7 +282,7 @@ function unfocus(){
 function plotDesc(p){
   const t=plotTitle(p);
   switch(p.status){
-    case 'til_solu': return `${t} er laus lóð í frístundabyggðinni Brekkuskógi — leigulóð til 25 ára, opið fyrir sölu eða annað. Í fallegu umhverfi við Brúará í Biskupstungum; hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
+    case 'til_solu': return `${t} er laus lóð í frístundabyggðinni Brekkuskógi — leigulóð til 25 ára; sala eða annað er til viðræðu. Í fallegu umhverfi við Brúará í Biskupstungum; hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
     case 'fratekin': return `${t} er frátekin. Hafðu samband fyrir nánari upplýsingar.`;
     case 'seld':     return `${t} er þegar ráðstafað.`;
     default:         return `Hafðu samband fyrir nánari upplýsingar um þessa lóð.`;
