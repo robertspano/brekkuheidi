@@ -16,8 +16,12 @@
   /* ---- Sticky header tint after scrolling past the hero ---- */
   const topbar = $('.topbar');
   if (topbar) {
-    const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 40);
+    // content pages scroll inside <body> (body.scrollable{overflow:auto}), so the
+    // scroll fires on body — not window. Listen to both and read whichever moves.
+    const getY = () => document.body.scrollTop || document.documentElement.scrollTop || window.scrollY || 0;
+    const onScroll = () => topbar.classList.toggle('scrolled', getY() > 40);
     onScroll();
+    document.body.addEventListener('scroll', onScroll, { passive: true });
     window.addEventListener('scroll', onScroll, { passive: true });
   }
 
