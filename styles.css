@@ -262,20 +262,28 @@ body.edit .edit-bar{display:flex}
 
 @media (max-width:768px){
   .brand .word{font-size:21px}
-  /* plot info panel → bottom sheet, so the map + selected plot stay visible above it */
+  /* plot info → bottom sheet; map + selected plot stay visible above it.
+     dvh + content sizing + safe-area so the CTA never hides behind the iOS toolbar. */
   .info-drawer{
     top:auto; right:0; left:0; bottom:0;
-    width:100%; height:auto; max-height:54vh;
-    transform:translateY(106%);
-    border-radius:18px 18px 0 0;
-    box-shadow:0 -16px 44px rgba(0,0,0,.34);
+    width:100%; height:auto;
+    max-height:72vh; max-height:72dvh;
+    transform:translateY(110%);
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -16px 46px rgba(0,0,0,.4);
   }
   .info-drawer.open{transform:translateY(0)}
-  .info-head{height:auto; padding:13px 18px; border-radius:18px 18px 0 0}
-  .info-body{padding:16px 20px 24px}
-  .info-title{font-size:24px}
-  .info-desc{margin:0 0 16px}
-  .spec{padding:11px 0}
+  .info-head{height:auto; min-height:0; padding:16px 18px 12px; border-radius:20px 20px 0 0; position:relative}
+  .info-head::before{content:""; position:absolute; top:7px; left:50%; transform:translateX(-50%);
+    width:42px; height:4px; border-radius:2px; background:rgba(255,255,255,.5)}
+  .info-body{flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch;
+    padding:14px 20px calc(18px + env(safe-area-inset-bottom))}
+  .info-title{font-size:22px; margin:0 0 5px}
+  .info-desc{font-size:13px; line-height:1.5; margin:0 0 12px}
+  .spec{padding:10px 0}
+  .spec .k{font-size:10.5px}
+  .spec .v{font-size:16px}
+  .info-cta{margin-top:16px; padding:14px}
   .legend-toggle .lt-label{gap:18px}
 }
 
