@@ -254,12 +254,19 @@ function focusPlot(p){
   map.setPaintProperty('plots-line','line-width',2.6);
   map.setPaintProperty('plots-line','line-opacity',1);
   updateStreetLabels();
+  openInfo(p);                       // open the sheet first so we can measure its real height
+  const isMobile=window.innerWidth<=768;
+  let bottomPad=160;
+  if(isMobile){
+    const el=document.getElementById('info');
+    // frame the plot in the area ABOVE the bottom sheet (use the sheet's actual height)
+    const sheetH = el ? el.getBoundingClientRect().height : Math.round(window.innerHeight*0.55);
+    bottomPad = Math.round(sheetH + 30);
+  }
   const b=new maplibregl.LngLatBounds();
   for(const c of p.ring) b.extend(c);
-  const isMobile=window.innerWidth<=768;
-  map.fitBounds(b,{ pitch:62, bearing:map.getBearing(), maxZoom:17.4, duration:1500, essential:true,
-    padding:{ top:90, bottom:isMobile?Math.round(window.innerHeight*0.58):160, left:isMobile?40:160, right:isMobile?40:440 } });
-  openInfo(p);
+  map.fitBounds(b,{ pitch:isMobile?50:62, bearing:map.getBearing(), maxZoom:17.4, duration:1500, essential:true,
+    padding:{ top:isMobile?70:90, bottom:bottomPad, left:isMobile?32:160, right:isMobile?32:440 } });
 }
 function unfocus(){
   if(!_focused) return; _focused=false;
