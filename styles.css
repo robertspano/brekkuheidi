@@ -266,7 +266,7 @@ body.edit .edit-bar{display:flex}
      dvh + content sizing + safe-area so the CTA never hides behind the iOS toolbar. */
   .info-drawer{
     top:auto; right:0; left:0; bottom:0;
-    width:100%; height:auto;
+    width:100%; max-width:none; height:auto;
     max-height:72vh; max-height:72dvh;
     transform:translateY(110%);
     border-radius:20px 20px 0 0;
