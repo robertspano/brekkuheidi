@@ -262,7 +262,20 @@ body.edit .edit-bar{display:flex}
 
 @media (max-width:768px){
   .brand .word{font-size:21px}
-  .info-drawer{width:100%}
+  /* plot info panel → bottom sheet, so the map + selected plot stay visible above it */
+  .info-drawer{
+    top:auto; right:0; left:0; bottom:0;
+    width:100%; height:auto; max-height:54vh;
+    transform:translateY(106%);
+    border-radius:18px 18px 0 0;
+    box-shadow:0 -16px 44px rgba(0,0,0,.34);
+  }
+  .info-drawer.open{transform:translateY(0)}
+  .info-head{height:auto; padding:13px 18px; border-radius:18px 18px 0 0}
+  .info-body{padding:16px 20px 24px}
+  .info-title{font-size:24px}
+  .info-desc{margin:0 0 16px}
+  .spec{padding:11px 0}
   .legend-toggle .lt-label{gap:18px}
 }
 

@@ -258,7 +258,7 @@ function focusPlot(p){
   for(const c of p.ring) b.extend(c);
   const isMobile=window.innerWidth<=768;
   map.fitBounds(b,{ pitch:62, bearing:map.getBearing(), maxZoom:17.4, duration:1500, essential:true,
-    padding:{ top:120, bottom:isMobile?330:160, left:isMobile?60:160, right:isMobile?60:440 } });
+    padding:{ top:90, bottom:isMobile?Math.round(window.innerHeight*0.58):160, left:isMobile?40:160, right:isMobile?40:440 } });
   openInfo(p);
 }
 function unfocus(){
