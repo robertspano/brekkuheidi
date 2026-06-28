@@ -84,7 +84,7 @@
   });
 
   /* ---- Autoplay card videos only while visible ---- */
-  const vids = $$('.pc-video video, .feature-media video, .hero-video, .plan-video video');
+  const vids = $$('.pc-video video, .video-showcase video, .feature-media video, .hero-video, .plan-video video');
   if (vids.length && 'IntersectionObserver' in window) {
     const vio = new IntersectionObserver(entries => {
       entries.forEach(e => {
