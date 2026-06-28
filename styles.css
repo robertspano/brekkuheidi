@@ -772,6 +772,10 @@ h1,h2,h3{font-family:var(--serif);font-weight:500;letter-spacing:.005em}
 .cta-inner p{font-size:18px;line-height:1.6;opacity:.9;margin:0 0 30px}
 .cta-inner .hero-cta{justify-content:center}
 
+/* inline text link (e.g. inside the map-feature paragraph) */
+.inline-link{color:var(--green);text-decoration:underline;text-decoration-thickness:1.5px;text-underline-offset:3px;font-weight:600}
+.inline-link:hover{color:var(--green-deep)}
+
 /* light (cream) variant of the contact band */
 .cta-band.cta-light{background:var(--cream);color:var(--ink)}
 .cta-band.cta-light::after{display:none}
