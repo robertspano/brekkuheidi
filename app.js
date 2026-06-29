@@ -3,7 +3,7 @@
 (() => {
 const COLORS = { til_solu:'#7FFF00', fratekin:'#0fe3ff', seld:'#FF383C', sidari:'#B6B6B6' };
 const COLORS_HI = { til_solu:'#C6FF87', fratekin:'#86EEFF', seld:'#FF8082', sidari:'#EDEDED' }; // hover highlight
-const LABELS = { til_solu:'Laus', fratekin:'Frátekin', seld:'Ráðstafað', sidari:'Síðari áfangi' };
+const LABELS = { til_solu:'Til leigu', fratekin:'Frátekin', seld:'Ráðstafað', sidari:'Síðari áfangi' };
 const ORDER  = ['til_solu','fratekin','seld','sidari'];
 const HEIGHT = 12;
 const LABEL_MIN_ZOOM = 12.5;   // street names only show once zoomed into the area
@@ -283,7 +283,7 @@ function unfocus(){
 function plotDesc(p){
   const t=plotTitle(p);
   switch(p.status){
-    case 'til_solu': return `${t} er laus lóð í frístundabyggðinni Brekkuskógi — leigulóð til 25 ára; sala eða annað er til viðræðu. Í fallegu umhverfi við Brúará í Biskupstungum; hafðu samband fyrir nánari upplýsingar um verð og skilmála.`;
+    case 'til_solu': return `${t} er laus lóð í frístundabyggðinni Brekkuskógi — leigulóð til 25 ára. Í fallegu umhverfi við Brúará í Biskupstungum; hafðu samband fyrir nánari upplýsingar um leiguverð og skilmála.`;
     case 'fratekin': return `${t} er frátekin. Hafðu samband fyrir nánari upplýsingar.`;
     case 'seld':     return `${t} er þegar ráðstafað.`;
     default:         return `Hafðu samband fyrir nánari upplýsingar um þessa lóð.`;
@@ -303,7 +303,7 @@ function openInfo(p){
     <p class="info-desc">${plotDesc(p)}</p>
     <div class="spec"><span class="k">Staða</span><span class="v"><span class="status-dot" style="background:${COLORS[p.status]}"></span>${LABELS[p.status]}</span></div>
     <div class="spec"><span class="k">Stærð</span><span class="v">${ferm}${haTxt}</span></div>
-    <div class="spec"><span class="k">Verð</span><span class="v">${verd}</span></div>
+    <div class="spec"><span class="k">Leiguverð</span><span class="v">${verd}</span></div>
     <div class="spec"><span class="k">Fasteignanúmer</span><span class="v">${dash(p.fasteignanr)}</span></div>`;
   $('#infoFoot').innerHTML=`<a class="info-cta" href="index.html#hafa-samband">Hafa samband</a>`;
   // carry the plot's address to the contact form so the visitor doesn't retype it
